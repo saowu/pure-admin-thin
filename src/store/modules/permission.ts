@@ -3,7 +3,7 @@ import { store } from "/@/store";
 import { cacheType } from "./types";
 import { constantMenus } from "/@/router";
 import { cloneDeep } from "lodash-unified";
-import { RouteConfigs } from "/@/layout/types";
+// import { RouteConfigs } from "/@/layout/types";
 import { ascending, filterTree } from "/@/router/utils";
 
 export const usePermissionStore = defineStore({
@@ -30,23 +30,25 @@ export const usePermissionStore = defineStore({
       this.menusTree = cloneDeep(
         filterTree(ascending(this.constantMenus.concat(routes)))
       );
-
-      const getButtonAuth = (arrRoutes: Array<RouteConfigs>) => {
-        if (!arrRoutes || !arrRoutes.length) return;
-        arrRoutes.forEach((v: RouteConfigs) => {
-          if (v.meta && v.meta.authority) {
-            this.buttonAuth.push(...v.meta.authority);
-          }
-          if (v.children) {
-            getButtonAuth(v.children);
-          }
-        });
-      };
-
-      getButtonAuth(this.wholeMenus);
+      //从路由中读取角色
+      // const getButtonAuth = (arrRoutes: Array<RouteConfigs>) => {
+      //   if (!arrRoutes || !arrRoutes.length) return;
+      //   arrRoutes.forEach((v: RouteConfigs) => {
+      //     if (v.meta && v.meta.authority) {
+      //       this.buttonAuth.push(...v.meta.authority);
+      //     }
+      //     if (v.children) {
+      //       getButtonAuth(v.children);
+      //     }
+      //   });
+      // };
+      // getButtonAuth(this.wholeMenus);
     },
     async changeSetting(routes) {
       await this.asyncActionRoutes(routes);
+    },
+    pushButtonAuth(auth: string) {
+      this.buttonAuth.push(auth);
     },
     cacheOperate({ mode, name }: cacheType) {
       switch (mode) {

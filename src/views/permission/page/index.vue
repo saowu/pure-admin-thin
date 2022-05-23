@@ -15,12 +15,14 @@ function changRole() {
   if (unref(purview) === "admin") {
     storageSession.setItem("info", {
       username: "test",
+      authority: "v-test",
       accessToken: "eyJhbGciOiJIUzUxMiJ9.test"
     });
     window.location.reload();
   } else {
     storageSession.setItem("info", {
       username: "admin",
+      authority: "v-admin",
       accessToken: "eyJhbGciOiJIUzUxMiJ9.admin"
     });
     window.location.reload();

@@ -42,7 +42,8 @@ const onLogin = async (formEl: FormInstance | undefined) => {
         loading.value = false;
         storageSession.setItem("info", {
           username: "admin",
-          accessToken: "eyJhbGciOiJIUzUxMiJ9.test"
+          authority: "v-admin",
+          accessToken: "eyJhbGciOiJIUzUxMiJ9.admin"
         });
         initRouter("admin").then(() => {});
         message.success("登陆成功");

@@ -12,6 +12,19 @@ const themeColors = {
     menuTitleHover: "#fff",
     menuActiveBefore: "#4091f7"
   },
+  classic: {
+    color: "#304056",
+    subMenuActiveText: "#fff",
+    menuBg: "#304056",
+    menuHover: "#4091f7",
+    subMenuBg: "#273346",
+    subMenuActiveBg: "#4091f7",
+    navTextColor: "#fff",
+    menuText: "#fff",
+    sidebarLogo: "#304056",
+    menuTitleHover: "#4091f7",
+    menuActiveBefore: "#4091f7"
+  },
   light: {
     color: "#409EFF",
     subMenuActiveText: "#409eff",

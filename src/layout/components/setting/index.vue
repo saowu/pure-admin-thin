@@ -55,7 +55,9 @@ let themeColors = ref<Array<themeColorsType>>([
   // 深粉色
   { color: "#eb2f96", themeColor: "pink" },
   // 深紫罗兰色
-  { color: "#722ed1", themeColor: "saucePurple" }
+  { color: "#722ed1", themeColor: "saucePurple" },
+  // vue-element-admin经典
+  { color: "#409EFF", themeColor: "classic" }
 ]);
 
 const verticalRef = templateRef<HTMLElement | null>("verticalRef", null);

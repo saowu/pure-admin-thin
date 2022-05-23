@@ -13,6 +13,7 @@ const auth = ref<boolean>(storageSession.getItem("info").username || "admin");
 function changRole(value) {
   storageSession.setItem("info", {
     username: value,
+    authority: `v-${value}`,
     accessToken: `eyJhbGciOiJIUzUxMiJ9.${value}`
   });
   window.location.reload();

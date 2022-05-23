@@ -28,5 +28,6 @@ menus:
   permission: 权限管理
   permissionPage: 页面权限
   permissionButton: 按钮权限
+  permissionTest: 测试权限
 status:
   hsLoad: 加载中...
