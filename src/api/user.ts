@@ -21,6 +21,11 @@ export const refreshToken = (data: object) => {
   return http.request("post", "/refreshToken", { data });
 };
 
+// getToken
+export const getToken = (params: object) => {
+  return http.request("get", "/getUserToken", { params });
+};
+
 // export const searchVague = (data: object) => {
 //   return http.request("post", "/searchVague", { data });
 // };

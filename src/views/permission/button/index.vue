@@ -7,14 +7,14 @@ export default {
 <script setup lang="ts">
 import { ref } from "vue";
 import { storageSession } from "/@/utils/storage";
+import { getToken } from "/@/api/user";
 
 const auth = ref<boolean>(storageSession.getItem("info").username || "admin");
 
-function changRole(value) {
-  storageSession.setItem("info", {
-    username: value,
-    authority: `v-${value}`,
-    accessToken: `eyJhbGciOiJIUzUxMiJ9.${value}`
+async function changRole(value) {
+  await getToken({ name: value }).then(req => {
+    storageSession.removeItem("info");
+    storageSession.setItem("info", req.data);
   });
   window.location.reload();
 }

@@ -8,25 +8,18 @@ export default {
 import { ref, unref } from "vue";
 import { storageSession } from "/@/utils/storage";
 import { useRenderIcon } from "/@/components/ReIcon/src/hooks";
+import { getToken } from "/@/api/user";
 
 let purview = ref<string>(storageSession.getItem("info").username);
 
-function changRole() {
-  if (unref(purview) === "admin") {
-    storageSession.setItem("info", {
-      username: "test",
-      authority: "v-test",
-      accessToken: "eyJhbGciOiJIUzUxMiJ9.test"
-    });
-    window.location.reload();
-  } else {
-    storageSession.setItem("info", {
-      username: "admin",
-      authority: "v-admin",
-      accessToken: "eyJhbGciOiJIUzUxMiJ9.admin"
-    });
-    window.location.reload();
-  }
+async function changRole() {
+  let name: string;
+  unref(purview) === "admin" ? (name = "test") : (name = "admin");
+  await getToken({ name: name }).then(req => {
+    storageSession.removeItem("info");
+    storageSession.setItem("info", req.data);
+  });
+  window.location.reload();
 }
 </script>
 

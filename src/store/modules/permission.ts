@@ -3,8 +3,8 @@ import { store } from "/@/store";
 import { cacheType } from "./types";
 import { constantMenus } from "/@/router";
 import { cloneDeep } from "lodash-unified";
-// import { RouteConfigs } from "/@/layout/types";
 import { ascending, filterTree } from "/@/router/utils";
+import { storageSession } from "/@/utils/storage";
 
 export const usePermissionStore = defineStore({
   id: "pure-permission",
@@ -23,32 +23,22 @@ export const usePermissionStore = defineStore({
     // 获取异步路由菜单
     asyncActionRoutes(routes) {
       if (this.wholeMenus.length > 0) return;
+      this.constantMenus = filterAsyncRoutes(
+        this.constantMenus,
+        storageSession.getItem("info").roles
+      );
       this.wholeMenus = filterTree(
         ascending(this.constantMenus.concat(routes))
       );
-
       this.menusTree = cloneDeep(
         filterTree(ascending(this.constantMenus.concat(routes)))
       );
-      //从路由中读取角色
-      // const getButtonAuth = (arrRoutes: Array<RouteConfigs>) => {
-      //   if (!arrRoutes || !arrRoutes.length) return;
-      //   arrRoutes.forEach((v: RouteConfigs) => {
-      //     if (v.meta && v.meta.authority) {
-      //       this.buttonAuth.push(...v.meta.authority);
-      //     }
-      //     if (v.children) {
-      //       getButtonAuth(v.children);
-      //     }
-      //   });
-      // };
-      // getButtonAuth(this.wholeMenus);
     },
-    async changeSetting(routes) {
-      await this.asyncActionRoutes(routes);
+    changeSetting(routes) {
+      this.asyncActionRoutes(routes);
     },
-    pushButtonAuth(auth: string) {
-      this.buttonAuth.push(auth);
+    pushButtonAuth(roles: string[]) {
+      this.buttonAuth = this.buttonAuth.concat(roles);
     },
     cacheOperate({ mode, name }: cacheType) {
       switch (mode) {
@@ -72,4 +62,36 @@ export const usePermissionStore = defineStore({
 
 export function usePermissionStoreHook() {
   return usePermissionStore(store);
+}
+
+/**
+ * Use meta.role to determine if the current user has permission
+ * @param roles
+ * @param route
+ */
+function hasPermission(roles, route) {
+  if (route.meta && route.meta.roles) {
+    return roles.some(role => route.meta.roles.includes(role));
+  } else {
+    return true;
+  }
+}
+
+/**
+ * Filter asynchronous routing tables by recursion
+ * @param routes asyncRoutes
+ * @param roles
+ */
+export function filterAsyncRoutes(routes, roles) {
+  const res = [];
+  routes.forEach(route => {
+    const tmp = { ...route };
+    if (hasPermission(roles, tmp)) {
+      if (tmp.children) {
+        tmp.children = filterAsyncRoutes(tmp.children, roles);
+      }
+      res.push(tmp);
+    }
+  });
+  return res;
 }

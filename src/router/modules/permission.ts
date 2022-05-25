@@ -32,7 +32,8 @@ const permissionRouter = {
       name: "permissionTest",
       component: () => import("/@/views/permission/test/index.vue"),
       meta: {
-        title: $t("menus.permissionTest")
+        title: $t("menus.permissionTest"),
+        roles: ["v-admin"]
       }
     }
   ]

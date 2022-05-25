@@ -16,6 +16,7 @@ import { useUserStoreHook } from "/@/store/modules/user";
 import { bg, avatar, currentWeek } from "./utils/static";
 import { ReImageVerify } from "/@/components/ReImageVerify";
 import { useRenderIcon } from "/@/components/ReIcon/src/hooks";
+import { getToken } from "/@/api/user";
 
 const imgCode = ref("");
 const router = useRouter();
@@ -37,18 +38,16 @@ const onLogin = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      // 模拟请求，需根据实际开发进行修改
-      setTimeout(() => {
-        loading.value = false;
-        storageSession.setItem("info", {
-          username: "admin",
-          authority: "v-admin",
-          accessToken: "eyJhbGciOiJIUzUxMiJ9.admin"
+      getToken({ name: ruleForm.username })
+        .then(req => {
+          storageSession.setItem("info", req.data);
+          initRouter().then(() => {});
+          message.success("登陆成功");
+          router.push("/");
+        })
+        .finally(() => {
+          loading.value = false;
         });
-        initRouter("admin").then(() => {});
-        message.success("登陆成功");
-        router.push("/");
-      }, 2000);
     } else {
       loading.value = false;
       return fields;
