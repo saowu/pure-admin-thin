@@ -1,4 +1,4 @@
-// 根据角色动态生成路由
+// 根据用户名返回token和roles
 import { MockMethod } from "vite-plugin-mock";
 
 const adminToken = {
